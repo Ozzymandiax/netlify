@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Servidor de Música - Estado</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f7f7f7;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .url {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #16a085;
+        }
+
+        .fecha {
+            margin-top: 0.5rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Servidor de Música en Línea</h1>
+        <div class="url" id="ngrok-url">Cargando URL pública...</div>
+        <div class="fecha" id="last-modified"></div>
+    </div>
+
+    <script>
+        const urlArchivo = 'ngrok_url.txt';
+
+        fetch(urlArchivo)
+            .then(response => {
+                if (!response.ok) throw new Error('No se pudo acceder al archivo');
+                document.getElementById('last-modified').textContent =
+                    "Última actualización: " + response.headers.get("last-modified");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('ngrok-url').textContent = data.trim();
+            })
+            .catch(error => {
+                document.getElementById('ngrok-url').textContent = "No se pudo cargar el archivo.";
+                console.error(error);
+            });
+    </script>
+</body>
+
+</html>
